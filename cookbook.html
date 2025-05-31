@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Cookbook | GreenBite</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/png" href="assets/logo.png">
+</head>
+<body>
+
+  <!-- 🔰 Navigation -->
+  <header class="nav-header">
+    <img src="assets/logo.png" alt="GreenBite Logo" class="site-logo" />
+    <div class="nav-search">
+      <h1 style="font-size: 1.75rem; margin: 0;">📖 My Cookbook</h1>
+    </div>
+    <div class="nav-links">
+      <a href="index.html" class="btn btn-secondary">🏠 Home</a>
+      <a href="grocery.html" class="btn btn-secondary">🛒 Grocery</a>
+    </div>
+  </header>
+
+  <!-- 📚 Cookbook Section -->
+  <section class="featured">
+    <h2>Saved Recipes</h2>
+    <p style="text-align: center;">Explore and manage recipes you've saved!</p>
+    <div class="recipe-cards" id="cookbookContainer"></div>
+  </section>
+
+  <!-- 🧾 Recipe Modal -->
+  <div id="recipeModal" class="modal hidden">
+    <div class="modal-content">
+      <h2 id="modal-title"></h2>
+      <img id="modal-image" src="" alt="Recipe Image" />
+      <p id="modal-summary"></p>
+
+      <details class="modal-section">
+        <summary>📝 Ingredients</summary>
+        <ul id="modal-ingredients"></ul>
+      </details>
+
+      <details class="modal-section">
+        <summary>👨‍🍳 Instructions</summary>
+        <ul id="modal-instructions"></ul>
+      </details>
+
+      <a id="modal-link" href="#" target="_blank" class="btn btn-primary">View Full Recipe</a>
+      <button class="btn btn-secondary" id="closeModalBtn">Close</button>
+    </div>
+  </div>
+
+  <!-- ✅ Toast -->
+  <div id="toast" class="toast hidden">Recipe removed!</div>
+
+  <!-- 📜 Script -->
+  <script>
+    const container = document.getElementById("cookbookContainer");
+    const toast = document.getElementById("toast");
+    let saved = JSON.parse(localStorage.getItem("cookbook")) || [];
+
+    function renderCookbook() {
+      container.innerHTML = saved.length === 0
+        ? "<p style='text-align:center'>Your cookbook is empty.</p>"
+        : "";
+
+      saved.forEach(recipe => {
+        const card = document.createElement("div");
+        card.classList.add("card");
+        card.innerHTML = `
+          <img src="${recipe.image}" alt="${recipe.title}" />
+          <h4>${recipe.title}</h4>
+          <button class="btn btn-primary" onclick="fetchRecipeDetails('${recipe.id}')">View</button>
+          <button class="btn btn-danger" onclick="removeFromCookbook('${recipe.id}')">Remove</button>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function removeFromCookbook(id) {
+      saved = saved.filter(item => item.id !== id);
+      localStorage.setItem("cookbook", JSON.stringify(saved));
+      showToast("Recipe removed!");
+      renderCookbook();
+    }
+
+    function showToast(message = "Done!") {
+      toast.textContent = message;
+      toast.classList.add("show");
+      toast.classList.remove("hidden");
+      setTimeout(() => {
+        toast.classList.remove("show");
+        toast.classList.add("hidden");
+      }, 2000);
+    }
+
+    function fetchRecipeDetails(id) {
+      const apiKey = "3b5fd187fe374deab2b8c082fd79dc08";
+      fetch(`https://api.spoonacular.com/recipes/${id}/information?apiKey=${apiKey}`)
+        .then(res => res.json())
+        .then(data => showRecipeModal(data))
+        .catch(err => {
+          console.error("Error fetching recipe info:", err);
+          showToast("Could not load recipe.");
+        });
+    }
+
+    function showRecipeModal(recipe) {
+      document.getElementById("modal-title").textContent = recipe.title;
+      document.getElementById("modal-image").src = recipe.image;
+      document.getElementById("modal-summary").innerHTML = recipe.summary;
+      document.getElementById("modal-link").href = recipe.sourceUrl;
+
+      const ingredientsList = document.getElementById("modal-ingredients");
+      const instructionsList = document.getElementById("modal-instructions");
+      ingredientsList.innerHTML = "";
+      instructionsList.innerHTML = "";
+
+      recipe.extendedIngredients.forEach(ing => {
+        const li = document.createElement("li");
+        li.textContent = ing.original;
+        ingredientsList.appendChild(li);
+      });
+
+      if (recipe.analyzedInstructions.length > 0) {
+        recipe.analyzedInstructions[0].steps.forEach(step => {
+          const li = document.createElement("li");
+          li.textContent = step.step;
+          instructionsList.appendChild(li);
+        });
+      } else {
+        const li = document.createElement("li");
+        li.textContent = "No instructions available.";
+        instructionsList.appendChild(li);
+      }
+
+      document.getElementById("recipeModal").classList.remove("hidden");
+    }
+
+    document.getElementById("closeModalBtn").addEventListener("click", () => {
+      document.getElementById("recipeModal").classList.add("hidden");
+    });
+
+    renderCookbook();
+  </script>
+</body>
+</html>

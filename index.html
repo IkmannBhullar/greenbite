@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GreenBite | Smart Recipes</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/png" href="assets/logo.png" />
+</head>
+<body>
+
+  <!-- 🔰 Navigation -->
+  <nav class="nav-header">
+    <img src="assets/logo.png" alt="GreenBite Logo" class="site-logo" />
+    
+    <div class="nav-search">
+      <input type="text" id="searchInput" placeholder="Enter ingredients (e.g. chicken, rice)" aria-label="Search by ingredients" />
+      <button id="searchBtn" class="btn btn-primary">Search</button>
+    </div>
+    
+    <div class="nav-links">
+      <a href="cookbook.html" class="btn btn-secondary">📖 Cookbook</a>
+      <a href="grocery.html" class="btn btn-secondary">🛒 Grocery List</a>
+    </div>
+  </nav>
+
+  <!-- 🌟 Featured Section -->
+  <section id="featuredSection" class="featured">
+    <h2>✨ Featured Categories</h2>
+    <p>Explore popular recipes by category</p>
+  </section>
+
+  <!-- 🧭 Category Grid -->
+  <section id="categorySection" class="categories">
+    <div class="category-grid">
+      <button class="cat-card" data-category="pasta">🍝 Pasta</button>
+      <button class="cat-card" data-category="salad">🥗 Salad</button>
+      <button class="cat-card" data-category="soup">🍲 Soup</button>
+      <button class="cat-card" data-category="pizza">🍕 Pizza</button>
+      <button class="cat-card" data-category="dessert">🍰 Dessert</button>
+      <button class="cat-card" data-category="breakfast">🍳 Breakfast</button>
+    </div>
+  </section>
+
+  <!-- 🍽 Recipe Cards -->
+  <section class="recipe-cards" id="recipeContainer"></section>
+
+  <!-- 🧾 Recipe Modal -->
+  <div id="recipeModal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-content">
+      <h2 id="modal-title">Recipe Title</h2>
+      <img id="modal-image" src="" alt="Recipe Image" />
+      <div id="modal-summary" class="modal-section"></div>
+
+      <div class="modal-section">
+        <h3>🧂 Ingredients</h3>
+        <ul id="modal-ingredients"></ul>
+      </div>
+
+      <div class="modal-section">
+        <h3>📋 Instructions</h3>
+        <ul id="modal-instructions"></ul>
+      </div>
+
+      <div class="modal-section center">
+        <a id="modal-link" href="#" target="_blank" class="btn btn-primary">View Full Recipe</a>
+        <button id="closeModalBtn" class="btn btn-danger">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔔 Toast -->
+  <div id="toast" class="toast hidden" role="status">Saved to Cookbook!</div>
+
+  <script src="script.js"></script>
+</body>
+</html>

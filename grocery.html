@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Grocery List | GreenBite</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/png" href="assets/logo.png">
+</head>
+<body>
+
+  <!-- 🔰 Navigation -->
+  <header class="nav-header">
+    <img src="assets/logo.png" alt="GreenBite Logo" class="site-logo" />
+    <div class="nav-search">
+      <h1 style="font-size: 1.75rem; margin: 0;">🛒 Smart Grocery List</h1>
+    </div>
+    <div class="nav-links">
+      <a href="index.html" class="btn btn-secondary">🏠 Home</a>
+      <a href="cookbook.html" class="btn btn-secondary">📖 Cookbook</a>
+    </div>
+  </header>
+
+  <!-- 🧾 Grocery Section -->
+  <section class="grocery-list-container">
+    <h2>Your Auto-Generated List</h2>
+    <p>Automatically pulled from your saved recipes.</p>
+
+    <div id="groceryList" class="grocery-list"></div>
+
+    <div class="export-buttons">
+      <button class="btn btn-primary" onclick="exportTxt()">📄 Export as TXT</button>
+      <button class="btn btn-secondary" onclick="exportPdf()">🖨 Export as PDF</button>
+    </div>
+  </section>
+
+  <!-- Scripts -->
+  <script src="grocery.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</body>
+</html>
